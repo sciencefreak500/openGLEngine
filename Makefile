@@ -6,3 +6,4 @@ CPPCOMPILE = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
 
 all: $(CPPCOMPILE)
 	g++ $(CPPCOMPILE) -w $(LIBS) -o Executable/$(OUTPUTNAME)
+	./Executable/$(OUTPUTNAME)
