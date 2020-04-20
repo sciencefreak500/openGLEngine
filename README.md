@@ -18,3 +18,14 @@ That should install glfw on your system.
 ### To Run
 in the root directory just run `make`. If it all runs fine, the executable `game` is found in `Executables` 
 just run that file to see the game.
+
+### Branching Strategy
+
+`master` - stable build of the project, everything just works here
+
+`develop` - stable, development build of the project, most cutting edge
+
+`epic/<thing>` - some aspect we are actively working on, this serves as a staging ground before merging to 
+develop
+
+`feature/<item>` - the actual work being done, this is your branch when you select a task
