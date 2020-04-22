@@ -8,7 +8,6 @@
 #include <sstream>
 #include <stdlib.h>
 
-
 // Include GLEW
 #include <GL/glew.h>
 
@@ -19,7 +18,14 @@ GLFWwindow* window;
 // Include GLM
 #include <glm/glm.hpp>
 
-GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path){
+//global variables
+GLuint programID;
+GLuint vertexbuffer;
+GLuint VertexArrayID;
+
+
+
+GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path) {
 
 	// Create the shaders
 	GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -107,70 +113,93 @@ GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path
 	return ProgramID;
 }
 
-int main( void )
-{
+bool initializeGLFW(int width = 640, int height = 480, const char * title = "openGLEngine") {
 	// Initialise GLFW
 	if( !glfwInit() )
 	{
 		fprintf( stderr, "Failed to initialize GLFW\n" );
 		getchar();
-		return -1;
+		return false;
 	}
 
 	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Open a window and create its OpenGL context
-	window = glfwCreateWindow( 1024, 768, "Tutorial 02 - Red triangle", NULL, NULL);
+	window = glfwCreateWindow( width, height, title, NULL, NULL);
 	if( window == NULL ){
-		fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
+		fprintf( stderr, "Failed to open GLFW window.\n" );
 		getchar();
 		glfwTerminate();
-		return -1;
+		return false;
 	}
 	glfwMakeContextCurrent(window);
-
-	// Initialize GLEW
-	glewExperimental = true; // Needed for core profile
-	if (glewInit() != GLEW_OK) {
-		fprintf(stderr, "Failed to initialize GLEW\n");
-		getchar();
-		glfwTerminate();
-		return -1;
-	}
 
 	// Ensure we can capture the escape key being pressed below
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
+	return true;
+}
+
+bool initializeGLEW() {
+	// Initialize GLEW
+	glewExperimental = true; // Needed for core profile
+	if (glewInit() != GLEW_OK) {
+		fprintf(stderr, "Failed to initialize GLEW\n");
+		glfwTerminate();
+		return false;
+	}
+
 	// Dark blue background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
-	GLuint VertexArrayID;
-	glGenVertexArrays(1, &VertexArrayID);
-	glBindVertexArray(VertexArrayID);
+	return true;
+}
 
+void cleanScene() {
+	// Cleanup VBO
+	glDeleteBuffers(1, &vertexbuffer);
+	glDeleteVertexArrays(1, &VertexArrayID);
+	glDeleteProgram(programID);
+
+	// Close OpenGL window and terminate GLFW
+	glfwTerminate();
+}
+
+void preRenderSetup() {
+	// Clear the screen, other setup steps will be located here later
+	glClear( GL_COLOR_BUFFER_BIT );
+}
+
+int main( void )
+{
+	if(!initializeGLFW() || !initializeGLEW()) {
+		return -1;
+	}
+ 
 	// Create and compile our GLSL program from the shaders
 	GLuint programID = LoadShaders( "Shaders/simple.vs", "Shaders/red.fs" );
 
-
-	static const GLfloat g_vertex_buffer_data[] = { 
+	static const GLfloat triangle[] = { 
 		-1.0f, -1.0f, 0.0f,
 		 1.0f, -1.0f, 0.0f,
 		 0.0f,  1.0f, 0.0f,
 	};
 
+	GLuint VertexArrayID;
+	glGenVertexArrays(1, &VertexArrayID);
+	glBindVertexArray(VertexArrayID);
+
 	GLuint vertexbuffer;
 	glGenBuffers(1, &vertexbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(triangle), triangle, GL_STATIC_DRAW);
 
-	do{
-
-		// Clear the screen
-		glClear( GL_COLOR_BUFFER_BIT );
+	while(!glfwWindowShouldClose(window)) {
+		preRenderSetup();
 
 		// Use our shader
 		glUseProgram(programID);
@@ -195,18 +224,10 @@ int main( void )
 		// Swap buffers
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+	}
 
-	} // Check if the ESC key was pressed or the window was closed
-	while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
-		   glfwWindowShouldClose(window) == 0 );
 
-	// Cleanup VBO
-	glDeleteBuffers(1, &vertexbuffer);
-	glDeleteVertexArrays(1, &VertexArrayID);
-	glDeleteProgram(programID);
-
-	// Close OpenGL window and terminate GLFW
-	glfwTerminate();
-
+	// cleanup and close
+	cleanScene();
 	return 0;
 }
