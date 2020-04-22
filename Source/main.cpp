@@ -1,56 +1,66 @@
-
-#include <GLFW/glfw3.h>
 #include <stdlib.h>
-#include <stdio.h>
-static void error_callback(int error, const char* description)
+#define GLEW_STATIC
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <iostream>
+
+int main(int argc, char const *argv[])
 {
-    fputs(description, stderr);
-}
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, GL_TRUE);
-}
-int main(void)
-{
-    GLFWwindow* window;
-    glfwSetErrorCallback(error_callback);
-    if (!glfwInit())
-        exit(EXIT_FAILURE);
-    window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        exit(EXIT_FAILURE);
-    }
-    glfwMakeContextCurrent(window);
-    glfwSetKeyCallback(window, key_callback);
-    while (!glfwWindowShouldClose(window))
-    {
-        float ratio;
-        int width, height;
-        glfwGetFramebufferSize(window, &width, &height);
-        ratio = width / (float) height;
-        glViewport(0, 0, width, height);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glRotatef((float) glfwGetTime() * 50.f, 0.f, 0.f, 1.f);
-        glBegin(GL_TRIANGLES);
-        glColor3f(1.f, 0.f, 0.f);
-        glVertex3f(-0.6f, -0.4f, 0.f);
-        glColor3f(0.f, 1.f, 0.f);
-        glVertex3f(0.6f, -0.4f, 0.f);
-        glColor3f(0.f, 0.f, 1.f);
-        glVertex3f(0.f, 0.6f, 0.f);
-        glEnd();
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-    glfwDestroyWindow(window);
-    glfwTerminate();
-    exit(EXIT_SUCCESS);
+	GLFWwindow* window;
+	// initialize GLFW
+	if(!glfwInit()) {
+		exit(EXIT_FAILURE);
+	}
+	int width = 640;
+	int height = 480;
+	window = glfwCreateWindow(640, 480, "openGLEngine", NULL, NULL);
+	if (!window) {
+		glfwTerminate();
+		exit(EXIT_FAILURE);
+	}
+	glfwMakeContextCurrent(window);
+	glfwSwapInterval(1);
+	// get GL version number
+	std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
+
+	// initialize GLEW
+	glewExperimental = true;
+	GLenum glewInitResult = glewInit();
+	if(glewInitResult != GLEW_OK) {
+		std::cout << "GLEW init error: " << glewGetErrorString(glewInitResult) << std::endl;
+	}
+	if(!GLEW_VERSION_2_1) {
+		std::cout << "OpenGL 2.1 not supported" << std::endl;
+		return false;
+	}
+	std::cout << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+	if(!GLEW_ARB_vertex_array_object) {
+		std::cout << "GLEW_ARB_vertex_array_object not supported!" << std::endl;
+	}
+	if(!GLEW_APPLE_vertex_array_object) {
+		std::cout << "GLEW_APPLE_vertex_array_object not supported!" << std::endl;
+	}
+	// enable defaults
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glLineWidth(2);
+
+	//main window loop
+
+	while(!glfwWindowShouldClose(window)) {
+		glViewport(0, 0, width, height);
+		glClearColor(0, 0, 0, 1); // black background
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
+
+	glfwDestroyWindow(window);
+	glfwTerminate();
+	return 0;
 }
