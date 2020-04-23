@@ -15,16 +15,27 @@ using namespace util;
 
 Application::Application()
 {
-    if (!initGLFW() || !initGLEW())
-    {
-        perror("INIT ERROR");
-        return;
-    }
-    print("Application Initialized");
 }
 
 Application::~Application()
 {
+}
+
+bool Application::init()
+{
+    if (!initGLFW() || !initGLEW())
+    {
+        perror("INIT ERROR");
+        close();
+        return false;
+    }
+    if(!renderer.loadShaders("Shaders/simple.vs", "Shaders/red.fs")) {
+        print("Shaders didnt load!");
+        close();
+        return false;
+    }
+    print("Application Initialized");
+    return true;
 }
 
 void Application::tick()
@@ -32,7 +43,6 @@ void Application::tick()
     print("tick begin");
     while(!glfwWindowShouldClose(window)) {
         preTick();
-
         renderer.render();
         
         glfwSwapBuffers(window);
@@ -98,24 +108,4 @@ bool Application::initGLEW()
 void Application::preTick()
 {
     glClear( GL_COLOR_BUFFER_BIT );
-}
-
-
-void Application::cleanScene()
-{
-
-	// Close OpenGL window and terminate GLFW
-	glfwTerminate();
-}
-
-
-
-
-        // GLFWwindow* getCurrentWindow();
-        // GLuint getProgramID();
-        // GLuint getVertexArrayID();
-
-GLFWwindow* Application::getCurrentWindow()
-{
-    return window;
 }

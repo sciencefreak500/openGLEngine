@@ -1,4 +1,5 @@
 #include "renderer.h"
+#include "utils.h"
 
 #include <stdio.h>
 #include <string>
@@ -8,6 +9,7 @@
 #include <algorithm>
 #include <sstream>
 
+using namespace util;
 
 Renderer::Renderer()
 {
@@ -51,6 +53,7 @@ void Renderer::render()
 
 bool Renderer::loadShaders(const char *vertex_file_path, const char *fragment_file_path)
 {
+    print("Begin Loading Shaders");
     // Create the shaders
     GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
     GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
@@ -141,12 +144,12 @@ bool Renderer::loadShaders(const char *vertex_file_path, const char *fragment_fi
     glDeleteShader(VertexShaderID);
     glDeleteShader(FragmentShaderID);
 
-    const char* attribute_name = "coord2d";
-    attributeCoord2D = glGetAttribLocation(program, attribute_name);
-    if (attributeCoord2D == -1) {
-        fprintf(stderr, "Could not bind attribute %s\n", attribute_name);
-        return false;
-    }
+    // const char* attribute_name = "coord2d";
+    // attributeCoord2D = glGetAttribLocation(program, attribute_name);
+    // if (attributeCoord2D == -1) {
+    //     fprintf(stderr, "Could not bind attribute %s\n", attribute_name);
+    //     return false;
+    // }
 
 
     return true;

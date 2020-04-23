@@ -6,8 +6,9 @@ int main( void )
 
 	// run the games main loop which updates the camera,
 	// renderer, inputs, etc
-    app.tick();
-
+	if(app.init()) {
+		app.tick();
+	}
 	return 0;
 }
  

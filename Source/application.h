@@ -6,6 +6,7 @@
 
 // Include GLFW
 #include <GLFW/glfw3.h>
+
 #include "renderer.h"
 
 class Application   
@@ -20,6 +21,8 @@ class Application
 
         // destructor
         ~Application();
+
+        bool init();
 
         // the main while loop 
         void tick();
@@ -43,17 +46,6 @@ class Application
         // Before the main tick loop - setup steps will be located here
         // example: clearing the glBuffer for the next render cycle
         void preTick();
-
-
-        // cleans the GLEW and GLFW scene
-        void cleanScene();
-
-
-        
-
-
-        // getters and setters
-        GLFWwindow* getCurrentWindow();
 
 };
 
