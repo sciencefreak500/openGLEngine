@@ -11,6 +11,13 @@
 
 using namespace util;
 
+//triangle
+GLfloat triangle_vertices[] = {
+    0.0,  0.8,
+    -0.8, -0.8,
+    0.8, -0.8,
+};
+
 Renderer::Renderer()
 {
 }
@@ -23,31 +30,41 @@ void Renderer::draw()
 {
 }
 
+void Renderer::setup()
+{
+    // Dark blue background
+	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+
+	glGenVertexArrays(1, &VertexArrayID);
+	glBindVertexArray(VertexArrayID);
+
+    glGenBuffers(1, &vertexbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_vertices), triangle_vertices, GL_STATIC_DRAW);
+}
+
 void Renderer::render()
 {
     draw();
 
-    glUseProgram(program);
-	glEnableVertexAttribArray(attributeCoord2D);
-	GLfloat triangle_vertices[] = {
-	    0.0,  0.8,
-	   -0.8, -0.8,
-	    0.8, -0.8,
-	};
+    glUseProgram(programID);
+	glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	
 	/* Describe our vertices array to OpenGL (it can't guess its format automatically) */
 	glVertexAttribPointer(
-		attributeCoord2D, // attribute
-		2,                 // number of elements per vertex, here (x,y)
-		GL_FLOAT,          // the type of each element
-		GL_FALSE,          // take our values as-is
-		0,                 // no extra data between each position
-		triangle_vertices  // pointer to the C array
-						  );
+			0,                  // attribute 0
+			3,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+		);
 	
 	/* Push each element in buffer_vertices to the vertex shader */
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 	
-	glDisableVertexAttribArray(attributeCoord2D);
+	glDisableVertexAttribArray(0);
 }
 
 
@@ -123,23 +140,23 @@ bool Renderer::loadShaders(const char *vertex_file_path, const char *fragment_fi
 
     // Link the program
     printf("Linking program\n");
-    GLuint program = glCreateProgram();
-    glAttachShader(program, VertexShaderID);
-    glAttachShader(program, FragmentShaderID);
-    glLinkProgram(program);
+    programID = glCreateProgram();
+    glAttachShader(programID, VertexShaderID);
+    glAttachShader(programID, FragmentShaderID);
+    glLinkProgram(programID);
 
     // Check the program
-    glGetProgramiv(program, GL_LINK_STATUS, &Result);
-    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &InfoLogLength);
+    glGetProgramiv(programID, GL_LINK_STATUS, &Result);
+    glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &InfoLogLength);
     if (InfoLogLength > 0)
     {
         std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
-        glGetProgramInfoLog(program, InfoLogLength, NULL, &ProgramErrorMessage[0]);
+        glGetProgramInfoLog(programID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
         printf("%s\n", &ProgramErrorMessage[0]);
     }
 
-    glDetachShader(program, VertexShaderID);
-    glDetachShader(program, FragmentShaderID);
+    glDetachShader(programID, VertexShaderID);
+    glDetachShader(programID, FragmentShaderID);
 
     glDeleteShader(VertexShaderID);
     glDeleteShader(FragmentShaderID);
@@ -153,4 +170,11 @@ bool Renderer::loadShaders(const char *vertex_file_path, const char *fragment_fi
 
 
     return true;
+}
+
+void Renderer::clean()
+{
+    glDeleteBuffers(1, &vertexbuffer);
+	glDeleteVertexArrays(1, &VertexArrayID);
+	glDeleteProgram(programID);
 }

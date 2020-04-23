@@ -6,19 +6,22 @@
 class Renderer
 {
 private:
-    GLuint program;
+    GLuint programID;
     GLuint attributeCoord2D;
-    // GLuint vertexBuffer;
-    // GLuint vertexArrayID;
+    GLuint vertexbuffer;
+    GLuint VertexArrayID;
 public:
     Renderer();
     ~Renderer();
 
+    void setup();
     // setup work before rendering to the screen - empty for now
     void draw();
 
     // actually rendering the buffers
     void render();
+
+    void clean();
 
     // loads in the Shaders from .vs and .fs files
     bool loadShaders(const char* vertex_file_path, const char* fragment_file_path);

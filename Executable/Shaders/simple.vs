@@ -1,5 +1,9 @@
-#version 120
-attribute vec2 coord2d;
-void main(void) {
-  gl_Position = vec4(coord2d, 0.0, 1.0);
+#version 330 core
+
+// Input vertex data, different for all executions of this shader.
+layout(location = 0) in vec3 vertexPosition_modelspace;
+
+void main(){
+    gl_Position.xyz = vertexPosition_modelspace;
+    gl_Position.w = 1.0;
 }

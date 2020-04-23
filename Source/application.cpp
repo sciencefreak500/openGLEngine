@@ -35,6 +35,9 @@ bool Application::init()
         return false;
     }
     print("Application Initialized");
+
+    renderer.setup();
+    
     return true;
 }
 
@@ -53,6 +56,7 @@ void Application::tick()
 
 void Application::close()
 {
+    renderer.clean();
     glfwTerminate();
 }
 
@@ -98,9 +102,6 @@ bool Application::initGLEW()
         glfwTerminate();
         return false;
     }
-
-    // Dark blue background
-    glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
     return true;
 }
 

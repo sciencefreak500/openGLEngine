@@ -1,6 +1,10 @@
-#version 120
-void main(void) {
-  gl_FragColor[0] = 0.0;
-  gl_FragColor[1] = 0.0;
-  gl_FragColor[2] = 1.0;
+#version 330 core
+
+// Ouput data
+out vec3 color;
+
+void main()
+{
+	// Output color = red 
+	color = vec3(1,0,0);
 }
