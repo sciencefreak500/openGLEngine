@@ -1,5 +1,5 @@
-#ifndef PROGRAM_H
-#define PROGRAM_H
+#ifndef APPLICATION_H
+#define APPLICATION_H
 
 // Include GLEW
 #include <GL/glew.h>
@@ -8,7 +8,7 @@
 #include <GLFW/glfw3.h>
 
 
-class Program   
+class Application   
 {   
     private:
         GLFWwindow* window;
@@ -18,10 +18,10 @@ class Program
 
     public:
         // constructor
-        Program(/* args */);
+        Application(/* args */);
 
         // destructor
-        ~Program();
+        ~Application();
 
         // Render a single object stored in an array
         void render(const GLfloat object[]);

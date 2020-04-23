@@ -1,4 +1,4 @@
-#include "../Header/core.h"
+#include "application.h"
 #include <stdio.h>
 #include <string>
 #include <vector>
@@ -8,21 +8,21 @@
 #include <sstream>
 
 
-Program::Program()
+Application::Application()
 {
     if (!initGLFW() || !initGLEW())
     {
         perror("INIT ERROR");
         return;
     }
-    std::cout << "Program Initialized" << std::endl;
+    std::cout << "Application Initialized" << std::endl;
 }
 
-Program::~Program()
+Application::~Application()
 {
 }
 
-void Program::render(const GLfloat object[])
+void Application::render(const GLfloat object[])
 {
     
 
@@ -68,7 +68,7 @@ void Program::render(const GLfloat object[])
 }
 
 
-bool Program::initGLFW(int width, int height, const char *title)
+bool Application::initGLFW(int width, int height, const char *title)
 {
     if (!glfwInit())
     {
@@ -101,7 +101,7 @@ bool Program::initGLFW(int width, int height, const char *title)
 }
 
 
-bool Program::initGLEW()
+bool Application::initGLEW()
 {
     // Initialize GLEW
     glewExperimental = true; // Needed for core profile
@@ -119,13 +119,13 @@ bool Program::initGLEW()
 }
 
 
-void Program::preRender()
+void Application::preRender()
 {
     glClear( GL_COLOR_BUFFER_BIT );
 }
 
 
-void Program::cleanScene()
+void Application::cleanScene()
 {
     GLuint VertexBuffer = getVertexBuffer();
     glDeleteBuffers(1, &VertexBuffer);
@@ -138,7 +138,7 @@ void Program::cleanScene()
 }
 
 
-bool Program::loadShaders(const char *vertex_file_path, const char *fragment_file_path)
+bool Application::loadShaders(const char *vertex_file_path, const char *fragment_file_path)
 {
     // Create the shaders
     GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -237,22 +237,22 @@ bool Program::loadShaders(const char *vertex_file_path, const char *fragment_fil
         // GLuint getProgramID();
         // GLuint getVertexArrayID();
 
-GLFWwindow* Program::getCurrentWindow()
+GLFWwindow* Application::getCurrentWindow()
 {
     return window;
 }
 
-GLuint Program::getProgramID()
+GLuint Application::getProgramID()
 {
     return programID;
 }
 
-GLuint Program::getVertexArrayID()
+GLuint Application::getVertexArrayID()
 {
     return vertexArrayID;
 }
 
-GLuint Program::getVertexBuffer()
+GLuint Application::getVertexBuffer()
 {
     return vertexBuffer;
 }

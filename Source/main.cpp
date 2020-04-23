@@ -1,4 +1,4 @@
-#include "../Header/core.h"
+#include "application.h"
 
 int main( void )
 {
@@ -10,7 +10,7 @@ int main( void )
         0.0f,  1.0f, 0.0f,
 	};
 
-    Program test;
+    Application test;
 
     test.render(triangle);
 
