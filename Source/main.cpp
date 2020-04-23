@@ -10,9 +10,9 @@ int main( void )
         0.0f,  1.0f, 0.0f,
 	};
 
-    Program* test;
+    Program test;
 
-    test->render(triangle);
+    test.render(triangle);
 
 	return 0;
 }

@@ -5,11 +5,7 @@ OUTPUTNAME = game
 
 CPPCOMPILE = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
 
-all: $(CPPCOMPILE) core.o
-	g++ $(CPPCOMPILE) core.o -w $(LIBS) -o Executable/$(OUTPUTNAME)
+all: $(CPPCOMPILE)
+	g++ $(CPPCOMPILE) -w $(LIBS) -o Executable/$(OUTPUTNAME)
 	cp -r Source/Shaders Executable
 	cd Executable && ./$(OUTPUTNAME)
-	rm core.o
-
-core.o:
-	g++ -c Source/core/header/core.h Source/core/core.cpp

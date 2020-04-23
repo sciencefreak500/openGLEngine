@@ -17,8 +17,14 @@ class Program
         GLuint vertexArrayID;
 
     public:
+        // constructor
+        Program(/* args */);
+
+        // destructor
+        ~Program();
+
         // Render a single object stored in an array
-        void render(const GLfloat *object);
+        void render(const GLfloat object[]);
 
 
         // Arguments: GLFWwindow* window, int width (optional), int height (optional), char* title (optional).
@@ -35,11 +41,11 @@ class Program
         void preRender();
 
 
-        //
+        // cleans the GLEW and GLFW scene
         void cleanScene();
 
 
-        //
+        // loads in the Shaders from .vs and .fs files
         bool loadShaders(const char* vertex_file_path, const char* fragment_file_path);
 
 
