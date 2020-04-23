@@ -7,5 +7,5 @@ CPPCOMPILE = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
 
 all: $(CPPCOMPILE)
 	g++ $(CPPCOMPILE) -w $(LIBS) -o Executable/$(OUTPUTNAME)
-	cp -r Source/Shaders Executable
-	cd Executable && ./$(OUTPUTNAME)
+	cp -r Source/Shaders Executable && echo ""
+	cd Executable && gdb -x ../gdbinit ./$(OUTPUTNAME)

@@ -29,7 +29,7 @@ class Program
 
         // Arguments: GLFWwindow* window, int width (optional), int height (optional), char* title (optional).
         // Return: boolean. true if initialization success, false otherwise. initialized window then putted into GLFWwindow* window
-        bool initGLFW(int width = 1920, int height = 1080, const char* title = "A random program");
+        bool initGLFW(int width = 640, int height = 480, const char* title = "A random program");
 
 
         // Initialize GLEW
