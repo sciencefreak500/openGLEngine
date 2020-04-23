@@ -30,10 +30,6 @@ class Application
         // cleanup and close the application
         void close();
 
-        // Render a single object stored in an array
-        void render(const GLfloat object[]);
-
-
         // Arguments: GLFWwindow* window, int width (optional), int height (optional), char* title (optional).
         // Return: boolean. true if initialization success, false otherwise. initialized window then putted into GLFWwindow* window
         bool initGLFW(int width = 640, int height = 480, const char* title = "A random program");
