@@ -1,6 +1,14 @@
-#include "./header/core.h"
+#include "../Header/core.h"
+#include <stdio.h>
+#include <string>
+#include <vector>
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+#include <sstream>
 
-void program::render(const GLfloat *object)
+
+void Program::render(const GLfloat *object)
 {
     if (!initGLFW() || !initGLEW())
     {
@@ -50,7 +58,7 @@ void program::render(const GLfloat *object)
 }
 
 
-bool program::initGLFW(int width, int height, const char *title)
+bool Program::initGLFW(int width, int height, const char *title)
 {
     if (!glfwInit())
     {
@@ -83,7 +91,7 @@ bool program::initGLFW(int width, int height, const char *title)
 }
 
 
-bool program::initGLEW()
+bool Program::initGLEW()
 {
     // Initialize GLEW
     glewExperimental = true; // Needed for core profile
@@ -101,13 +109,13 @@ bool program::initGLEW()
 }
 
 
-void program::preRender()
+void Program::preRender()
 {
     glClear( GL_COLOR_BUFFER_BIT );
 }
 
 
-void program::cleanScene()
+void Program::cleanScene()
 {
     GLuint VertexBuffer = getVertexBuffer();
     glDeleteBuffers(1, &VertexBuffer);
@@ -120,7 +128,7 @@ void program::cleanScene()
 }
 
 
-bool program::loadShaders(const char *vertex_file_path, const char *fragment_file_path)
+bool Program::loadShaders(const char *vertex_file_path, const char *fragment_file_path)
 {
     // Create the shaders
     GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -219,22 +227,22 @@ bool program::loadShaders(const char *vertex_file_path, const char *fragment_fil
         // GLuint getProgramID();
         // GLuint getVertexArrayID();
 
-GLFWwindow* program::getCurrentWindow()
+GLFWwindow* Program::getCurrentWindow()
 {
     return window;
 }
 
-GLuint program::getProgramID()
+GLuint Program::getProgramID()
 {
     return programID;
 }
 
-GLuint program::getVertexArrayID()
+GLuint Program::getVertexArrayID()
 {
     return vertexArrayID;
 }
 
-GLuint program::getVertexBuffer()
+GLuint Program::getVertexBuffer()
 {
     return vertexBuffer;
 }

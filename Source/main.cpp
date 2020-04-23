@@ -1,4 +1,4 @@
-#include "core/header/core.h"
+#include "../Header/core.h"
 
 int main( void )
 {
@@ -10,7 +10,7 @@ int main( void )
         0.0f,  1.0f, 0.0f,
 	};
 
-    program* test;
+    Program* test;
 
     test->render(triangle);
 

@@ -1,11 +1,5 @@
-#include <stdio.h>
-#include <string>
-#include <vector>
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <sstream>
-#include <stdlib.h>
+#ifndef PROGRAM_H
+#define PROGRAM_H
 
 // Include GLEW
 #include <GL/glew.h>
@@ -13,10 +7,8 @@
 // Include GLFW
 #include <GLFW/glfw3.h>
 
-// Include GLM
-#include <glm/glm.hpp>
 
-class program   
+class Program   
 {   
     private:
         GLFWwindow* window;
@@ -57,3 +49,5 @@ class program
         GLuint getVertexBuffer();
         GLuint getVertexArrayID();
 };
+
+#endif
