@@ -6,15 +6,13 @@
 
 // Include GLFW
 #include <GLFW/glfw3.h>
-
+#include "renderer.h"
 
 class Application   
 {   
     private:
         GLFWwindow* window;
-        GLuint programID;
-        GLuint vertexBuffer;
-        GLuint vertexArrayID;
+        Renderer renderer;
 
     public:
         // constructor
@@ -22,6 +20,12 @@ class Application
 
         // destructor
         ~Application();
+
+        // the main while loop 
+        void tick();
+
+        // cleanup and close the application
+        void close();
 
         // Render a single object stored in an array
         void render(const GLfloat object[]);
@@ -36,24 +40,21 @@ class Application
         // Return: boolean, true if initialization success, false otherwise
         bool initGLEW();
 
-
-        // Clear the screen, other setup steps will be located here later
-        void preRender();
+        // Before the main tick loop - setup steps will be located here
+        // example: clearing the glBuffer for the next render cycle
+        void preTick();
 
 
         // cleans the GLEW and GLFW scene
         void cleanScene();
 
 
-        // loads in the Shaders from .vs and .fs files
-        bool loadShaders(const char* vertex_file_path, const char* fragment_file_path);
+        
 
 
         // getters and setters
         GLFWwindow* getCurrentWindow();
-        GLuint getProgramID();
-        GLuint getVertexBuffer();
-        GLuint getVertexArrayID();
+
 };
 
 #endif

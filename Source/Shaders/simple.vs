@@ -1,11 +1,6 @@
-#version 330 core
-
-// Input vertex data, different for all executions of this shader.
-layout(location = 0) in vec3 vertexPosition_modelspace;
-
-void main(){
-
-    gl_Position.xyz = vertexPosition_modelspace;
-    gl_Position.w = 1.0;
-
+#version 120
+void main(void) {
+  gl_FragColor[0] = 0.0;
+  gl_FragColor[1] = 0.0;
+  gl_FragColor[2] = 1.0;
 }

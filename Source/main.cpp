@@ -2,17 +2,11 @@
 
 int main( void )
 {
-    // Triangle to be rendered
-	static const GLfloat triangle[] = 
-    { 
-        -1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,
-        0.0f,  1.0f, 0.0f,
-	};
+    Application app;
 
-    Application test;
-
-    test.render(triangle);
+	// run the games main loop which updates the camera,
+	// renderer, inputs, etc
+    app.tick();
 
 	return 0;
 }

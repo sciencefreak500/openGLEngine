@@ -1,12 +1,5 @@
-#version 330 core
-
-// Ouput data
-out vec3 color;
-
-void main()
-{
-
-	// Output color = red 
-	color = vec3(1,0,0);
-
+#version 120
+attribute vec2 coord2d;
+void main(void) {
+  gl_Position = vec4(coord2d, 0.0, 1.0);
 }
