@@ -112,6 +112,8 @@ void Renderer::setup()
 	glEnable(GL_DEPTH_TEST);
 	// Accept fragment if it closer to the camera than the former one
 	glDepthFunc(GL_LESS);
+    // Cull triangles which normal is not towards the camera
+	glEnable(GL_CULL_FACE);
 
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
@@ -276,14 +278,6 @@ bool Renderer::loadShaders(const char *vertex_file_path, const char *fragment_fi
 
     glDeleteShader(VertexShaderID);
     glDeleteShader(FragmentShaderID);
-
-    // const char* attribute_name = "coord2d";
-    // attributeCoord2D = glGetAttribLocation(program, attribute_name);
-    // if (attributeCoord2D == -1) {
-    //     fprintf(stderr, "Could not bind attribute %s\n", attribute_name);
-    //     return false;
-    // }
-
 
     return true;
 }
