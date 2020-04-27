@@ -1,0 +1,1 @@
+sudo apt-get install glew-utils libglew-dev libglm-dev libxrandr-dev xorg-dev
