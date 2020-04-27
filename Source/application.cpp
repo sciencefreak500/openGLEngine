@@ -23,7 +23,7 @@ Application::~Application()
 
 bool Application::init()
 {
-    if (!initGLFW() || !initGLEW())
+    if (!initSDL() || !initGLEW())
     {
         perror("INIT ERROR");
         close();
@@ -44,12 +44,12 @@ bool Application::init()
 void Application::tick()
 {
     print("tick begin");
-    while(!glfwWindowShouldClose(window)) {
+    while(!endApplication) {
         preTick();
         renderer.render();
         
-        glfwSwapBuffers(window);
-		glfwPollEvents();
+        SDL_GL_SwapWindow(window);
+        pollEvents();
     }
     close();
 }
@@ -57,37 +57,50 @@ void Application::tick()
 void Application::close()
 {
     renderer.clean();
-    glfwTerminate();
+    SDL_GL_DeleteContext(glSDLContext);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 }
 
-bool Application::initGLFW(int width, int height, const char *title)
+bool Application::initSDL(int width, int height, const char *title)
 {
-    if (!glfwInit())
+    // initialize these subsystems
+    SDL_SetMainReady();
+    uint32_t subsystemList = SDL_INIT_VIDEO | SDL_INIT_AUDIO;
+    SDL_Init(subsystemList);
+    // verify if initialization is complete
+    if (SDL_WasInit(SDL_INIT_VIDEO) == subsystemList)
     {
-        fprintf(stderr, "Failed to initialize GLFW\n");
+        print("SDL Error!");
+        print(SDL_GetError());
         getchar();
         return false;
     }
 
-    glfwWindowHint(GLFW_SAMPLES, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    // add attributes for OpenGL integration with SDL2
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
     // Open a window and create its OpenGL context
-    window = glfwCreateWindow(width, height, title, NULL, NULL);
+    window = SDL_CreateWindow(
+        title, 
+        SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
+        width, height,
+        SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
+    );
     if (window == NULL)
     {
-        fprintf(stderr, "Failed to open GLFW window.\n");
-        getchar();
-        glfwTerminate();
+        print("Failed to open SDL window.");
+        SDL_DestroyWindow(window);
+        SDL_Quit();
         return false;
     }
-    glfwMakeContextCurrent(window);
 
-    // Ensure we can capture the escape key being pressed below
-    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+    // create the GL context
+    glSDLContext = SDL_GL_CreateContext(window);
+
 
     return true;
 }
@@ -99,7 +112,8 @@ bool Application::initGLEW()
     if (glewInit() != GLEW_OK)
     {
         fprintf(stderr, "Failed to initialize GLEW\n");
-        glfwTerminate();
+        SDL_DestroyWindow(window);
+        SDL_Quit();
         return false;
     }
     return true;
@@ -109,4 +123,27 @@ bool Application::initGLEW()
 void Application::preTick()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Application::pollEvents()
+{
+    if(SDL_PollEvent(&windowEvent)) {
+        // any quit event created
+        if(windowEvent.type == SDL_QUIT) {
+            endApplication = true;
+        }
+        
+        // keydown event
+        if(windowEvent.type == SDL_KEYDOWN) {
+            SDL_Keycode key =  windowEvent.key.keysym.sym;
+            // escape = quit application
+            if(key == SDLK_ESCAPE) {
+                endApplication = true;
+            }
+        }
+        // keyup event
+        if(windowEvent.type == SDL_KEYUP) {
+            SDL_Keycode key =  windowEvent.key.keysym.sym;
+        }
+    }
 }

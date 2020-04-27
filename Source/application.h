@@ -1,19 +1,19 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-// Include GLEW
 #include <GL/glew.h>
-
-// Include GLFW
-#include <GLFW/glfw3.h>
+#include <SDL2/SDL.h>
 
 #include "renderer.h"
 
 class Application   
 {   
     private:
-        GLFWwindow* window;
+        SDL_Window* window;
         Renderer renderer;
+        SDL_GLContext glSDLContext;
+        bool endApplication = false;
+        SDL_Event windowEvent;
 
     public:
         // constructor
@@ -30,9 +30,8 @@ class Application
         // cleanup and close the application
         void close();
 
-        // Arguments: GLFWwindow* window, int width (optional), int height (optional), char* title (optional).
-        // Return: boolean. true if initialization success, false otherwise. initialized window then putted into GLFWwindow* window
-        bool initGLFW(int width = 640, int height = 480, const char* title = "A random program");
+        // Inits a new SDL window with optional width, height, and title args
+        bool initSDL(int width = 640, int height = 480, const char* title = "A random program");
 
 
         // Initialize GLEW
@@ -42,6 +41,9 @@ class Application
         // Before the main tick loop - setup steps will be located here
         // example: clearing the glBuffer for the next render cycle
         void preTick();
+
+        // Get the keyboard and mouse inputs from the window
+        void pollEvents();
 
 };
 
