@@ -1,5 +1,5 @@
 DIRS = Source
-LIBS = -L/usr/local/lib -lglfw3 -lrt -lm -ldl -lX11 -lpthread -lxcb -lXau -lXdmcp -lGLEW -lGLU -lGL -pthread -lX11-xcb -lxcb-glx -ldrm -lXdamage -lXfixes -lxcb-dri2 -lXxf86vm -lXext
+LIBS = -lSDL2 -lGLEW -lGLU -lGL
 
 OUTPUTNAME = game
 
@@ -7,5 +7,11 @@ CPPCOMPILE = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
 
 all: $(CPPCOMPILE)
 	g++ $(CPPCOMPILE) -w $(LIBS) -o Executable/$(OUTPUTNAME)
-	cp -r Source/Shaders Executable
+	cp -r Source/Shaders Executable && echo ""
 	cd Executable && ./$(OUTPUTNAME)
+
+
+debug: $(CPPCOMPILE)
+	g++ $(CPPCOMPILE) -w $(LIBS) -o Executable/$(OUTPUTNAME)
+	cp -r Source/Shaders Executable && echo ""
+	cd Executable && gdb -x ../gdbinit ./$(OUTPUTNAME)
