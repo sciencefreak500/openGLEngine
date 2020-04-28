@@ -20,6 +20,9 @@ public:
 
     // load texture
     GLuint loadTexture();
+
+    // load image to SDL_Surface
+    SDL_Surface *LoadImage(char* filename);
 };
 
 
