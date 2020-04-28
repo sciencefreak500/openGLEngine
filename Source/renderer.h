@@ -2,6 +2,7 @@
 #define RENDERER_H
 
 #include "GL/glew.h"
+#include "texture.h"
 
 // Include GLM
 #include <glm/glm.hpp>
@@ -23,6 +24,10 @@ private:
     // matrix projections for camera perspective
     GLuint MatrixID;
     glm::mat4 MVP;
+
+    // texture 
+    GLuint texture;
+    GLuint textureID;
 
 public:
     // constructor
