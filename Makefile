@@ -1,5 +1,5 @@
 DIRS = Source
-LIBS = -lSDL2 -lGLEW -lGLU -lGL
+LIBS = -lSDL2 -lGLEW -lGLU -lGL -lSDL2_image
 
 OUTPUTNAME = game
 
