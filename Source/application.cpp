@@ -127,23 +127,7 @@ void Application::preTick()
 
 void Application::pollEvents()
 {
-    if(SDL_PollEvent(&windowEvent)) {
-        // any quit event created
-        if(windowEvent.type == SDL_QUIT) {
-            endApplication = true;
-        }
-        
-        // keydown event
-        if(windowEvent.type == SDL_KEYDOWN) {
-            SDL_Keycode key =  windowEvent.key.keysym.sym;
-            // escape = quit application
-            if(key == SDLK_ESCAPE) {
-                endApplication = true;
-            }
-        }
-        // keyup event
-        if(windowEvent.type == SDL_KEYUP) {
-            SDL_Keycode key =  windowEvent.key.keysym.sym;
-        }
-    }
+    eventHandler.updateHandler();
+    eventHandler.displayKeys();
+    endApplication = eventHandler.isApplicationEnded();
 }

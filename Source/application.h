@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 
 #include "renderer.h"
+#include "event-handler.h"
 
 class Application   
 {   
@@ -13,8 +14,7 @@ class Application
         Renderer renderer;
         SDL_GLContext glSDLContext;
         bool endApplication = false;
-        SDL_Event windowEvent;
-
+        EventHandler eventHandler;
     public:
         // constructor
         Application(/* args */);
