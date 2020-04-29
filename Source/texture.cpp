@@ -67,7 +67,7 @@ SDL_Surface * Texture::LoadImage(char* filename)
 GLuint Texture::loadTexture()
 {
     GLuint texID = 0;
-    SDL_Surface* surface = LoadImage("../Resources/stone.png");
+    SDL_Surface* surface = LoadImage("../Resources/stone_diffuse.png");
     if(!surface) {
         print("could not load image!");
         return 0;
