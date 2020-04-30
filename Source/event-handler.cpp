@@ -3,7 +3,7 @@
 
 using namespace util;
 
-EventHandler::EventHandler(/* args */)
+EventHandler::EventHandler()
 {
     bindKey(SDLK_w, "w");
     bindKey(SDLK_a, "a");
@@ -31,6 +31,11 @@ void EventHandler::updateHandler()
         if(windowEvent.type == SDL_KEYUP) {
             keyboardInputs(false);
         }
+
+        if(windowEvent.type == SDL_MOUSEMOTION) {
+            SDL_GetMouseState(mouseX, mouseY);
+            handleMousePosition();
+        }
     }
 }
 
@@ -54,6 +59,11 @@ void EventHandler::mouseInputs()
 
 }
 
+void EventHandler::handleMousePosition()
+{
+
+}
+
 bool EventHandler::isApplicationEnded()
 {
     return applicationEnded;
@@ -63,7 +73,7 @@ void EventHandler::displayKeys()
 {
     print("----------");
     for (keyTriggerIterator = keyTriggerMap.begin();  keyTriggerIterator != keyTriggerMap.end(); keyTriggerIterator++) {
-        std::cout << keymap[keyTriggerIterator->first] << ": " << keyTriggerIterator->second << std::endl;
+        print(keymap[keyTriggerIterator->first], ":", keyTriggerIterator->second);
     }
     print("----------");
 }

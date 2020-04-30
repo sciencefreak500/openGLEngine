@@ -10,6 +10,9 @@ private:
     SDL_Event windowEvent;
     bool applicationEnded = false;
 
+    // mouse position X and Y
+    int *mouseX, *mouseY;
+
     std::map<SDL_Keycode, char*> keymap;
     std::map<SDL_Keycode,char*>::iterator keymapIterator;
 
@@ -30,6 +33,10 @@ public:
 
     //check mouse inputs for something new
     void mouseInputs();
+
+    // calculate mouse delta, and determine if 
+    // return to center screen is needed
+    void handleMousePosition();
 
     // poll event if applications should be ended
     bool isApplicationEnded();
