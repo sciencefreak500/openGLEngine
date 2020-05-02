@@ -130,7 +130,7 @@ void Application::preTick()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //calculate time delta
-    deltaTime = SDL_GetTicks() - lastTime;
+    deltaTime = SDL_GetTicks() - float(lastTime);
 }
 
 void Application::postTick()
@@ -144,11 +144,11 @@ void Application::postTick()
 void Application::pollEvents()
 {
     updateHandler();
-    displayKeys();
-    print("Time Delta:", deltaTime );
+    // displayKeys();
+    // print("Time Delta:", deltaTime );
 }
 
-int Application::getTimeDelta()
+float Application::getTimeDelta()
 {
     return deltaTime;
 }

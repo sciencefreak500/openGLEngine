@@ -10,14 +10,23 @@ private:
     SDL_Event windowEvent;
     bool applicationEnded = false;
 
-    // mouse position X and Y
-    int *mouseX, *mouseY;
+    typedef void (*classFuncPtr)();
 
-    std::map<SDL_Keycode, char*> keymap;
-    std::map<SDL_Keycode,char*>::iterator keymapIterator;
+    std::map<SDL_Keycode, classFuncPtr> keymap;
+    std::map<SDL_Keycode, classFuncPtr>::iterator keymapIterator;
 
     std::map<SDL_Keycode, bool> keyTriggerMap;
     std::map<SDL_Keycode,bool>::iterator keyTriggerIterator;
+
+protected:
+    SDL_Window* window;
+
+    // mouse position X and Y
+    int mouseX, mouseY;
+
+    // window width and height
+    int w, h;
+
 public:
     EventHandler(/* args */);
     ~EventHandler();
@@ -26,10 +35,13 @@ public:
     void updateHandler();
 
     // bind a key to an input
-    void bindKey(SDL_Keycode, char*);
+    void bindKey(SDL_Keycode, classFuncPtr);
 
     // check keyboard for something new
     void keyboardInputs(bool isKeyDown);
+
+    // trigger bound functions if keypressed is true
+    void triggerBoundFunctions();
 
     //check mouse inputs for something new
     void mouseInputs();
@@ -42,6 +54,11 @@ public:
     bool isApplicationEnded();
 
     void displayKeys();
+
+    void moveForward();
+    void moveBackward();
+    void moveLeft();
+    void moveRight();
 };
 
 

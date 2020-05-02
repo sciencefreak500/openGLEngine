@@ -10,12 +10,15 @@
 class Application : public EventHandler
 {   
     private:
-        SDL_Window* window;
         Renderer renderer;
         SDL_GLContext glSDLContext;
 
         bool endApplication = false;
-        int lastTime, deltaTime;
+        int lastTime;
+
+    protected:
+        float deltaTime;
+
     public:
         // constructor
         Application(/* args */);
@@ -49,7 +52,7 @@ class Application : public EventHandler
         void pollEvents();
 
         //helper functions
-        int getTimeDelta();
+        float getTimeDelta();
 
 };
 
