@@ -1,14 +1,17 @@
 #include "event-handler.h"
 #include "utils.h"
 
+#include <glm/glm.hpp>
+#include "camera.h"
+
 using namespace util;
 
-EventHandler::EventHandler(/* args */)
+EventHandler::EventHandler()
 {
-    bindKey(SDLK_w, "w");
-    bindKey(SDLK_a, "a");
-    bindKey(SDLK_s, "s");
-    bindKey(SDLK_d, "d");
+    // bindKey(SDLK_w, &Camera::moveForward);
+    // bindKey(SDLK_a, &Camera::moveLeft);
+    // bindKey(SDLK_s, &Camera::moveBackward);
+    // bindKey(SDLK_d, &Camera::moveRight);
 }
 
 EventHandler::~EventHandler()
@@ -31,10 +34,17 @@ void EventHandler::updateHandler()
         if(windowEvent.type == SDL_KEYUP) {
             keyboardInputs(false);
         }
+
+        if(windowEvent.type == SDL_MOUSEMOTION) {
+            SDL_GetMouseState(&mouseX, &mouseY);
+            handleMousePosition();
+        }
+
+        triggerBoundFunctions();
     }
 }
 
-void EventHandler::bindKey(SDL_Keycode keycode, char* binding)
+void EventHandler::bindKey(SDL_Keycode keycode, classFuncPtr binding)
 {
     keymap[keycode] = binding;
     keyTriggerMap[keycode] = false;
@@ -43,15 +53,38 @@ void EventHandler::bindKey(SDL_Keycode keycode, char* binding)
 void EventHandler::keyboardInputs(bool isKeyDown)
 {
     SDL_Keycode key = windowEvent.key.keysym.sym;
+    if(key == SDLK_ESCAPE) {
+        applicationEnded = true;
+    }
     keymapIterator = keymap.find(key);
     if (keymapIterator != keymap.end()) {
         keyTriggerMap[key] = isKeyDown;
     }
 }
 
+void EventHandler::triggerBoundFunctions()
+{
+    std::map<SDL_Keycode,bool>::iterator i;
+    for (i = keyTriggerMap.begin(); i != keyTriggerMap.end(); i++)
+    {
+        if(i->second == true) {
+            print(i->first);
+            // classFuncPtr func = keymap[i->first];
+            // func();
+        }
+    }
+    
+}
+
 void EventHandler::mouseInputs()
 {
 
+}
+
+void EventHandler::handleMousePosition()
+{    
+    SDL_GetWindowSize(window, &w, &h);
+    SDL_WarpMouseInWindow(window, w/2, h/2);
 }
 
 bool EventHandler::isApplicationEnded()
@@ -63,7 +96,7 @@ void EventHandler::displayKeys()
 {
     print("----------");
     for (keyTriggerIterator = keyTriggerMap.begin();  keyTriggerIterator != keyTriggerMap.end(); keyTriggerIterator++) {
-        std::cout << keymap[keyTriggerIterator->first] << ": " << keyTriggerIterator->second << std::endl;
+        print(keymap[keyTriggerIterator->first], ":", keyTriggerIterator->second);
     }
     print("----------");
 }

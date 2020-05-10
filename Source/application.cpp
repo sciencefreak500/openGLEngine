@@ -15,6 +15,9 @@ using namespace util;
 
 Application::Application()
 {
+    lastTime = SDL_GetTicks();
+
+    
 }
 
 Application::~Application()
@@ -29,7 +32,7 @@ bool Application::init()
         close();
         return false;
     }
-    if(!renderer.loadShaders("Shaders/simple.vs", "Shaders/red.fs")) {
+    if(!renderer.loadShaders("Shaders/vertexshader.vs", "Shaders/fragmentshader.fs")) {
         print("Shaders didnt load!");
         close();
         return false;
@@ -44,12 +47,11 @@ bool Application::init()
 void Application::tick()
 {
     print("tick begin");
-    while(!endApplication) {
+    while(!isApplicationEnded()) {
         preTick();
         renderer.render();
         
-        SDL_GL_SwapWindow(window);
-        pollEvents();
+        postTick();
     }
     close();
 }
@@ -98,6 +100,9 @@ bool Application::initSDL(int width, int height, const char *title)
         return false;
     }
 
+    //set mouse position to center window
+    SDL_WarpMouseInWindow(window, width/2, height/2);
+
     // create the GL context
     glSDLContext = SDL_GL_CreateContext(window);
 
@@ -123,11 +128,27 @@ bool Application::initGLEW()
 void Application::preTick()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    //calculate time delta
+    deltaTime = SDL_GetTicks() - float(lastTime);
+}
+
+void Application::postTick()
+{
+    lastTime = SDL_GetTicks();
+
+    SDL_GL_SwapWindow(window);
+    pollEvents();
 }
 
 void Application::pollEvents()
 {
-    eventHandler.updateHandler();
-    eventHandler.displayKeys();
-    endApplication = eventHandler.isApplicationEnded();
+    updateHandler();
+    // displayKeys();
+    // print("Time Delta:", deltaTime );
+}
+
+float Application::getTimeDelta()
+{
+    return deltaTime;
 }

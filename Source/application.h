@@ -7,14 +7,18 @@
 #include "renderer.h"
 #include "event-handler.h"
 
-class Application   
+class Application : public EventHandler
 {   
     private:
-        SDL_Window* window;
         Renderer renderer;
         SDL_GLContext glSDLContext;
+
         bool endApplication = false;
-        EventHandler eventHandler;
+        int lastTime;
+
+    protected:
+        float deltaTime;
+
     public:
         // constructor
         Application(/* args */);
@@ -38,12 +42,17 @@ class Application
         // Return: boolean, true if initialization success, false otherwise
         bool initGLEW();
 
-        // Before the main tick loop - setup steps will be located here
-        // example: clearing the glBuffer for the next render cycle
+        // Before the render function is called, starts the tick loop off
         void preTick();
+
+        // after render function is called, ends the tick loop
+        void postTick();
 
         // Get the keyboard and mouse inputs from the window
         void pollEvents();
+
+        //helper functions
+        float getTimeDelta();
 
 };
 
