@@ -4,20 +4,26 @@
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
 
+#include "messagebus.h"
 #include "renderer.h"
 #include "event-handler.h"
 
-class Application : public EventHandler
+class Application
 {   
     private:
+        SDL_Window* window;
+
         Renderer renderer;
         SDL_GLContext glSDLContext;
 
-        bool endApplication = false;
+        bool isEndApplication = false;
         int lastTime;
 
     protected:
         float deltaTime;
+        MessageBus messageBus;
+
+        EventHandler eventHandler(&messageBus);
 
     public:
         // constructor

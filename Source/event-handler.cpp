@@ -6,12 +6,8 @@
 
 using namespace util;
 
-EventHandler::EventHandler()
+EventHandler::EventHandler(MessageBus * messageBus) : BusNode(messageBus)
 {
-    // bindKey(SDLK_w, &Camera::moveForward);
-    // bindKey(SDLK_a, &Camera::moveLeft);
-    // bindKey(SDLK_s, &Camera::moveBackward);
-    // bindKey(SDLK_d, &Camera::moveRight);
 }
 
 EventHandler::~EventHandler()
@@ -37,7 +33,7 @@ void EventHandler::updateHandler()
 
         if(windowEvent.type == SDL_MOUSEMOTION) {
             SDL_GetMouseState(&mouseX, &mouseY);
-            handleMousePosition();
+            // handleMousePosition();
         }
 
         triggerBoundFunctions();
@@ -83,8 +79,8 @@ void EventHandler::mouseInputs()
 
 void EventHandler::handleMousePosition()
 {    
-    SDL_GetWindowSize(window, &w, &h);
-    SDL_WarpMouseInWindow(window, w/2, h/2);
+    // SDL_GetWindowSize(window, &w, &h);
+    // SDL_WarpMouseInWindow(window, w/2, h/2);
 }
 
 bool EventHandler::isApplicationEnded()
@@ -99,4 +95,9 @@ void EventHandler::displayKeys()
         print(keymap[keyTriggerIterator->first], ":", keyTriggerIterator->second);
     }
     print("----------");
+}
+
+void EventHandler::onNotify(Message message)
+{
+    print("EventHandler", message.getEvent());
 }

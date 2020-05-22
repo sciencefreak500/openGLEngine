@@ -3,8 +3,9 @@
 
 #include <map>
 #include <SDL2/SDL.h>
+#include "busnode.h"
 
-class EventHandler
+class EventHandler : public BusNode
 {
 private:
     SDL_Event windowEvent;
@@ -18,8 +19,10 @@ private:
     std::map<SDL_Keycode, bool> keyTriggerMap;
     std::map<SDL_Keycode,bool>::iterator keyTriggerIterator;
 
+    void onNotify(Message message);
+
 protected:
-    SDL_Window* window;
+    
 
     // mouse position X and Y
     int mouseX, mouseY;
@@ -28,7 +31,7 @@ protected:
     int w, h;
 
 public:
-    EventHandler(/* args */);
+    EventHandler(MessageBus * messageBus) : BusNode(messageBus);
     ~EventHandler();
 
     // update the event handler from Application

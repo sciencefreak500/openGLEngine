@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 
 
-class Camera : public Application
+class Camera
 {
 private:
     glm::mat4 ViewMatrix;

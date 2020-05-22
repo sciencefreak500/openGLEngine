@@ -22,8 +22,8 @@ void Camera::computeMatricesFromInputs()
     float horizontalAngle = 3.14f, verticalAngle = 0.0f;
 
     // Compute new orientation
-	horizontalAngle += mouseSpeed * float(w/2 - mouseX );
-	verticalAngle   += mouseSpeed * float( h/2 - mouseY );
+	// horizontalAngle += mouseSpeed * float(w/2 - mouseX );
+	// verticalAngle   += mouseSpeed * float( h/2 - mouseY );
 
 	direction = glm::vec3(
 		cos(verticalAngle) * sin(horizontalAngle), 
@@ -51,22 +51,22 @@ mat4 Camera::getProjectionMatrix()
 
 void Camera::moveForward()
 {
-    position += direction * deltaTime * speed;
+    // position += direction * deltaTime * speed;
 }
 
 void Camera::moveBackward()
 {
-    position -= direction * deltaTime * speed;
+    // position -= direction * deltaTime * speed;
 }
 
 void Camera::moveLeft()
 {
-    position -= right * deltaTime * speed;
+    // position -= right * deltaTime * speed;
 }
 
 void Camera::moveRight()
 {
-    position += right * deltaTime * speed;
+    // position += right * deltaTime * speed;
 }
 
 

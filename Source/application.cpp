@@ -47,7 +47,7 @@ bool Application::init()
 void Application::tick()
 {
     print("tick begin");
-    while(!isApplicationEnded()) {
+    while(!isEndApplication) {
         preTick();
         renderer.render();
         
@@ -138,12 +138,12 @@ void Application::postTick()
     lastTime = SDL_GetTicks();
 
     SDL_GL_SwapWindow(window);
-    pollEvents();
+    // pollEvents();
 }
 
 void Application::pollEvents()
 {
-    updateHandler();
+    // updateHandler();
     // displayKeys();
     // print("Time Delta:", deltaTime );
 }
